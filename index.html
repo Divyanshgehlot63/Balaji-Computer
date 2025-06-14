@@ -15,8 +15,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #eee;
-            /* Gaming-inspired dark neon background */
-            background: linear-gradient(135deg, #181c2f 0%, #2d2d7b 40%, #ff4f81 80%, #00f2fe 100%);
+            /* Gaming-inspired dark neon background with more pink */
+            background: linear-gradient(135deg, #181c2f 0%, #2d2d7b 30%, #ff4f81 60%, #ff69b4 85%, #00f2fe 100%);
             min-height: 100vh;
         }
 
@@ -319,15 +319,60 @@
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        .loader-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #fff;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.5s;
+        }
+        .loader-img {
+            width: 90px;
+            height: 90px;
+            margin-bottom: 30px;
+        }
+        .loader-lines {
+            width: 80px;
+            height: 8px;
+            background: linear-gradient(90deg, #ff4f81, #ff69b4, #00f2fe);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        .loader-lines::before {
+            content: '';
+            position: absolute;
+            left: -80px;
+            top: 0;
+            width: 80px;
+            height: 8px;
+            background: linear-gradient(90deg, #ff69b4 0%, #fff 50%, #ff69b4 100%);
+            animation: loading-move 1.2s infinite linear;
+        }
+        @keyframes loading-move {
+            0% { left: -80px; }
+            100% { left: 80px; }
+        }
     </style>
 </head>
 <body>
+    <div class="loader-bg" id="loader-bg">
+        <img src="366-3665207_emitra-rajasthan-e-mitra-logo-removebg-preview.png" alt="Loading Logo" class="loader-img">
+        <div class="loader-lines"></div>
+    </div>
     <canvas id="star-bg" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;"></canvas>
     <header>
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <div class="logo-icon">BC</div>
+                    <img src="366-3665207_emitra-rajasthan-e-mitra-logo-removebg-preview.png" alt="E-Mitra Logo" style="width:60px;height:60px;border-radius:12px;object-fit:cover;box-shadow:0 4px 15px rgba(255,107,53,0.3);background:#fff;">
                     <div class="logo-text">
                         <h1>Balaji Computer E-Mitra</h1>
                         <p>Government and Educational Service Center</p>
@@ -425,7 +470,7 @@
             </div>
 
             <div class="owner-section fade-in" style="text-align:center; margin-bottom:2.5rem;">
-                <h3 style="color:#ff6b35; margin-bottom:0.7rem;">Owner</h3>
+                <h3 style="color:#fff; margin-bottom:0.7rem;">Owner</h3>
                 <img src="pg.jpg" alt="Owner Photo" style="width:110px;height:110px;border-radius:50%;object-fit:cover;margin-bottom:10px;box-shadow:0 4px 16px rgba(255,107,53,0.25);">
                 <p style="margin:0.5rem 0 0 0;"><strong style="font-size:1.15rem; color:#fff;">Praveen Gehlot</strong></p>
                 <p style="color:#ccc; font-size:1rem;">Owner &amp; Service Provider</p>
@@ -525,6 +570,15 @@
         resizeCanvas();
         createStars();
         animateStars();
+
+        // Loader hide on page load
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader-bg');
+            setTimeout(function() {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            }, 3000); // Show loader for at least 3 seconds
+        });
 
         // Add smooth scrolling and animations
         document.addEventListener('DOMContentLoaded', function() {
