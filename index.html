@@ -514,61 +514,70 @@
 
     <script>
         // Star background animation
-        const canvas = document.getElementById('star-bg');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-        const STAR_COUNT = 80;
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        // Disable star animation on mobile devices to improve performance
+        function isMobileDevice() {
+            return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         }
-        function createStars() {
-            stars = [];
-            for (let i = 0; i < STAR_COUNT; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    r: Math.random() * 1.5 + 0.5,
-                    speed: Math.random() * 0.15 + 0.05,
-                    alpha: Math.random() * 0.5 + 0.5
-                });
+        if (!isMobileDevice()) {
+            const canvas = document.getElementById('star-bg');
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+            const STAR_COUNT = 80;
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
-        }
-        function drawStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let star of stars) {
-                ctx.save();
-                ctx.globalAlpha = star.alpha;
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.r, 0, 2 * Math.PI);
-                ctx.fillStyle = '#fff';
-                ctx.shadowColor = '#fff';
-                ctx.shadowBlur = 8;
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-        function updateStars() {
-            for (let star of stars) {
-                star.y += star.speed;
-                if (star.y > canvas.height) {
-                    star.x = Math.random() * canvas.width;
-                    star.y = 0;
+            function createStars() {
+                stars = [];
+                for (let i = 0; i < STAR_COUNT; i++) {
+                    stars.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        r: Math.random() * 1.5 + 0.5,
+                        speed: Math.random() * 0.15 + 0.05,
+                        alpha: Math.random() * 0.5 + 0.5
+                    });
                 }
             }
-        }
-        function animateStars() {
-            updateStars();
-            drawStars();
-            requestAnimationFrame(animateStars);
-        }
-        window.addEventListener('resize', () => {
+            function drawStars() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let star of stars) {
+                    ctx.save();
+                    ctx.globalAlpha = star.alpha;
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.r, 0, 2 * Math.PI);
+                    ctx.fillStyle = '#fff';
+                    ctx.shadowColor = '#fff';
+                    ctx.shadowBlur = 8;
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+            function updateStars() {
+                for (let star of stars) {
+                    star.y += star.speed;
+                    if (star.y > canvas.height) {
+                        star.x = Math.random() * canvas.width;
+                        star.y = 0;
+                    }
+                }
+            }
+            function animateStars() {
+                updateStars();
+                drawStars();
+                requestAnimationFrame(animateStars);
+            }
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                createStars();
+            });
             resizeCanvas();
             createStars();
-        });
-        resizeCanvas();
-        createStars();
-        animateStars();
+            animateStars();
+        } else {
+            // Hide the canvas on mobile for better performance
+            document.getElementById('star-bg').style.display = 'none';
+        }
 
         // Loader hide on page load
         window.addEventListener('load', function() {
